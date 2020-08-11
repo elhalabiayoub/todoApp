@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -24,6 +24,7 @@ const Input = styled.input`
 	}
 `;
 const Button = styled.button`
+	cursor: pointer;
 	border-radius: 20px;
 	background-color: #55a630;
 	width: 20%;
@@ -57,6 +58,10 @@ const Div = styled.div`
 
 function Form() {
 	const [inputValue, setinputValue] = useState("");
+	const inputRef = useRef();
+	useEffect(() => {
+		inputRef.current.focus();
+	}, []);
 
 	const submitHandler = (e) => {
 		//const id = Math.random();
@@ -65,10 +70,15 @@ function Form() {
 			text: inputValue,
 			isdone: false,
 		};
-		axios.post("/todos", todo).then((res) => {
-			console.log(res.data);
-			setinputValue("");
-		});
+
+		if (inputValue.length !== 0) {
+			axios.post("/todos", todo).then((res) => {
+				console.log(res.data);
+				setinputValue("");
+			});
+		} else {
+			alert("the input is empty");
+		}
 	};
 	const changeHandler = (e) => {
 		setinputValue(e.target.value);
@@ -77,6 +87,7 @@ function Form() {
 		<Div className="form">
 			<form onSubmit={submitHandler}>
 				<Input
+					ref={inputRef}
 					value={inputValue}
 					onChange={changeHandler}
 					className="form__input"

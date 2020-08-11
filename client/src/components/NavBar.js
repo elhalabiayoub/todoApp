@@ -6,8 +6,9 @@ function NavBar() {
 		const id = window.location.pathname;
 		console.log(id);
 		if (id === "/") {
-			document.getElementById("Todo").style.backgroundColor = "teal";
+			document.getElementById("/Todo").style.backgroundColor = "teal";
 		} else {
+			console.log(document.getElementById(`${id}`));
 			document.getElementById(`${id}`).style.backgroundColor = "teal";
 		}
 	}, []);

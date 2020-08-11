@@ -5,8 +5,8 @@ const Todo = require("../models/Todo");
 
 router.get("/todos", (req, res) => {
 	console.log(" ok");
-
-	Todo.find({}, (err, todos) => {
+	var query = Todo.find({}).sort({ _id: -1 });
+	query.exec((err, todos) => {
 		if (err) {
 			return handleError(err);
 		} else {

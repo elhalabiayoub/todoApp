@@ -13,7 +13,7 @@
 	margin: auto 0;
 	cursor: pointer;
 	text-align: justify;
-	width: 10%;
+	width: 20%;
 }
 .nav__title > span {
 	color: teal;
@@ -23,29 +23,35 @@
 	display: flex;
 	justify-content: center;
 	margin: auto 20px;
-	width: 70%;
+	width: 60%;
 }
 
 .nav__list > li {
-	margin-left: 50px;
 	list-style: none;
+
 	max-height: 50px;
+	width: 100%;
 	padding: 15px 5px;
-	transition: background-color 100ms;
-	cursor: pointer;
+	transition: background-color 100ms ease-in-out;
+
+	text-align: center;
 }
 .nav__list > li:hover {
 	background-color: teal;
+	border: 1px solid black;
 }
 .nav__list > li > a {
 	text-decoration: none;
 	color: white;
+	cursor: pointer;
 }
 
 .nav > img {
 	border-radius: 50%;
-	width: 5%;
+	border: 1px solid teal;
+	margin: 2px;
+	width: 50px;
 	zoom: 1.2;
-	height: 90%;
+	height: 80%;
 	cursor: pointer;
 }

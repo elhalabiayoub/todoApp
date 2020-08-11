@@ -7,11 +7,13 @@ import axios from "axios";
 
 const Div = styled.div`
 	background-image: linear-gradient(to bottom, #0096c7, #0077b6, #14213d);
-	border-radius: 30px;
+	border-radius: 80px;
+	margin-bottom: 50px;
+	box-shadow: 15px -15px 20px rgba(72, 202, 228, 0.6);
 	padding: 10px;
 	.todos__done {
 		text-decoration: line-through black;
-		cursor: pointer;
+
 		display: flex;
 		color: black;
 		font-size: 15px;
@@ -20,10 +22,15 @@ const Div = styled.div`
 		transition: background-color 100ms ease;
 		border-radius: 20px;
 		background-color: rgba(72, 202, 228, 0);
+
 		&:hover {
 			border-radius: 20px;
 			background-color: rgba(72, 202, 228, 0.1);
 		}
+	}
+	.todos__done > div > li {
+		width: 90%;
+		height: 30px;
 	}
 	.todo__hidden {
 		display: none;
@@ -33,7 +40,6 @@ const Div = styled.div`
 	}
 
 	.todos__ligne {
-		cursor: pointer;
 		display: flex;
 		color: white;
 		padding: 5px 20px;
@@ -48,6 +54,7 @@ const Div = styled.div`
 
 	.react-icons {
 		justify-content: center;
+		cursor: pointer;
 		transition: background-color 100ms ease;
 		&:hover {
 			background-color: rgba(0, 0, 0, 0.3);
@@ -64,6 +71,7 @@ const Li = styled.li`
 	color: white;
 	list-style: none;
 	margin-bottom: 10px;
+	cursor: pointer;
 `;
 
 const Input = styled.input`
@@ -161,8 +169,10 @@ function Todos() {
 				}
 			}
 		} else if (message === "cancel") {
-			document.getElementById(`${id}`).style.display = "none";
+			localStorage.setItem("id", id);
+			document.getElementById(`${index}`).style.display = "none";
 			setOnClick(false);
+			setEditebale("");
 		} else if (message === "correct") {
 			document.getElementById(`${id}`).style.display = "none";
 			setOnClick(false);
@@ -176,15 +186,19 @@ function Todos() {
 
 	const submitHandlerEdit = (id) => {
 		console.log({ editebale });
-
-		axios
-			.put(`/todos/${id}`, { text: editebale, isdone: false })
-			.then((res) => {
-				console.log(res.data);
-			});
+		if (editebale.length !== 0) {
+			axios
+				.put(`/todos/${id}`, { text: editebale, isdone: false })
+				.then((res) => {
+					console.log(res.data);
+				});
+		} else {
+			alert("the input is empty");
+		}
 	};
 	const onClickHandlerIsDone = (isdone, text, id) => {
 		console.log({ isdone });
+		setOnClick(false);
 
 		axios.put(`/todos/${id}`, { text: text, isdone: !isdone }).then((res) => {
 			console.log(res.data);
@@ -198,34 +212,33 @@ function Todos() {
 		<Div>
 			<ul>
 				{todos.map(({ _id: id, text, isdone, index }) => {
+					console.log({ index });
 					return (
-						<div
-							onClick={onClickHandlerIsDone.bind(this, isdone, text, id)}
-							className={isdone ? "todos__done " : "todos__ligne"}
-						>
+						<div className={isdone ? "todos__done " : "todos__ligne"}>
 							<div style={{ width: "70%" }}>
-								<Li key={index}>{text}</Li>
-								<form
-									onSubmit={submitHandlerEdit.bind(this, id)}
-									id={id}
-									className="todo__hidden"
-								>
-									<Input
-										id={index}
-										key={index}
-										value={editebale}
-										onChange={changeHandlerEdit}
-										placeholder="modifier cet action ...  "
-									/>
-									<Button type="submit">correct</Button>
-									<ThemeProvider theme={theme}>
+								<Li onClick={onClickHandlerIsDone.bind(this, isdone, text, id)}>
+									{text}
+								</Li>
+								{!isdone && (
+									<form id={id} className="todo__hidden">
+										<Input
+											value={editebale}
+											onChange={changeHandlerEdit}
+											placeholder="modifier cet action ...  "
+										/>
 										<Button
-											onClick={onClickHandler.bind(this, "cancel", index)}
+											type="submit"
+											onClick={submitHandlerEdit.bind(this, id)}
 										>
-											cancel
+											correct
 										</Button>
-									</ThemeProvider>
-								</form>
+										<ThemeProvider theme={theme}>
+											<Button onClick={onClickHandler.bind(this, "cancel", id)}>
+												cancel
+											</Button>
+										</ThemeProvider>
+									</form>
+								)}
 							</div>
 							<div style={{ width: "20%", justifyContent: "center" }}>
 								<IconContext.Provider
