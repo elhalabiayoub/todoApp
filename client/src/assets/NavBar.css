@@ -1,0 +1,51 @@
+.nav {
+	display: flex;
+	justify-content: space-around;
+	background-color: #14213d;
+	height: 50px;
+	color: white;
+	margin-bottom: 30px;
+	padding: 2px 20px;
+	position: sticky;
+	top: 0;
+}
+.nav__title {
+	margin: auto 0;
+	cursor: pointer;
+	text-align: justify;
+	width: 10%;
+}
+.nav__title > span {
+	color: teal;
+}
+
+.nav__list {
+	display: flex;
+	justify-content: center;
+	margin: auto 20px;
+	width: 70%;
+}
+
+.nav__list > li {
+	margin-left: 50px;
+	list-style: none;
+	max-height: 50px;
+	padding: 15px 5px;
+	transition: background-color 100ms;
+	cursor: pointer;
+}
+.nav__list > li:hover {
+	background-color: teal;
+}
+.nav__list > li > a {
+	text-decoration: none;
+	color: white;
+}
+
+.nav > img {
+	border-radius: 50%;
+	width: 5%;
+	zoom: 1.2;
+	height: 90%;
+	cursor: pointer;
+}
