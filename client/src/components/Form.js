@@ -65,7 +65,7 @@ function Form() {
 
 	const submitHandler = (e) => {
 		//const id = Math.random();
-
+		e.preventDefault();
 		const todo = {
 			text: inputValue,
 			isdone: false,

@@ -1,10 +1,6 @@
-.app__content {
-	width: 80%;
-	margin: auto;
+body {
+	background-color: #d2edf3;
 	font-size: 15px;
 	font-weight: 500;
 	font-family: "Kanit", sans-serif;
-}
-body {
-	background-color: #d2edf3;
 }
