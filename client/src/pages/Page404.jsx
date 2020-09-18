@@ -1,7 +1,7 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { setTodos } from "../redux/actions/rootActions";
+import {connect} from "react-redux";
+import {Link} from "react-router-dom";
+import {setTodos} from "../redux/actions/rootActions";
 
 const PageNotFound = (props) => {
 	const styling = {
@@ -10,7 +10,7 @@ const PageNotFound = (props) => {
 			flexDirection: "column",
 			alignItems: "center",
 			justifyContent: "center",
-			height: "100vh",
+			height: "100%",
 			width: "50%",
 		},
 		title: {
@@ -20,16 +20,18 @@ const PageNotFound = (props) => {
 		container: {
 			display: "flex",
 			flexDirection: "row",
-			height: "100vh",
+			justifyContent: "center",
+			alignItems: "center",
+			height: "100%",
 			width: "100%",
 		},
 		right: {
-			height: "100vh",
+			height: "100%",
 			width: "50%",
 		},
 		image: {
-			maxWidth: "100%",
-			height: "100vh",
+			width: "50%",
+			height: "80%",
 		},
 	};
 
@@ -49,19 +51,10 @@ const PageNotFound = (props) => {
 				</Link>
 			</div>
 			<div style={styling.right}>
-				<img src="" style={styling.image} />
-			</div>
-			<div>
-				<h2>redux</h2>
-				<button onClick={props.setTodos}>+</button>
-				{props.todos.map((todo) => {
-					console.log(todo);
-					return (
-						<p>
-							{todo._id} , {todo.text} , {`${todo.isdone}`}
-						</p>
-					);
-				})}
+				<img
+					src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRnltfxyRHuEEUE4gIZp9fr77Q8goigP7mQ6Q&usqp=CAU"
+					style={styling.image}
+				/>
 			</div>
 		</div>
 	);
@@ -73,4 +66,4 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps, { setTodos })(PageNotFound);
+export default connect(mapStateToProps, {setTodos})(PageNotFound);

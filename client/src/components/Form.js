@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {useState, useEffect, useRef} from "react";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -79,6 +79,7 @@ function Form() {
 		} else {
 			alert("the input is empty");
 		}
+		setinputValue("");
 	};
 	const changeHandler = (e) => {
 		setinputValue(e.target.value);

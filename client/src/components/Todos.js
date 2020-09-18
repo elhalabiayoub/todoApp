@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { ThemeProvider } from "styled-components";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FaRegEdit } from "react-icons/fa";
-import { IconContext } from "react-icons";
+import React, {useEffect, useState} from "react";
+import {ThemeProvider} from "styled-components";
+import {AiOutlineDelete} from "react-icons/ai";
+import {FaRegEdit} from "react-icons/fa";
+import {IconContext} from "react-icons";
 import axios from "axios";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import TodoStyle from "../assets/TodosStyle";
-import { setTodos } from "../redux/actions/rootActions";
+import {
+	setTodos,
+	addTodo,
+	deleteTodo,
+	updateTodo,
+} from "../redux/actions/rootActions";
+import Pusher from "pusher-js";
 
-const { Div, Li, Input, theme, Button } = TodoStyle();
+const {Div, Li, Input, theme, Button} = TodoStyle();
 
 function Todos(props) {
 	const [onclick, setOnClick] = useState(false);
@@ -17,7 +23,31 @@ function Todos(props) {
 
 	useEffect(() => {
 		props.setTodos();
-	}, [props.todos]);
+	}, []);
+	useEffect(() => {
+		var pusher = new Pusher("eec14663e9a10b7c75b3", {
+			cluster: "eu",
+		});
+
+		const channel = pusher.subscribe("todo");
+		channel.bind("inserted", function (data) {
+			//alert(JSON.stringify(data));
+			props.addTodo(data.todo);
+		});
+		channel.bind("deleted", function (data) {
+			//alert(JSON.stringify(data.todo));
+			props.deleteTodo(data.todo._id);
+		});
+		channel.bind("edited", function (data) {
+			//alert(JSON.stringify(data.todo));
+
+			props.updateTodo(data.todo.id._id, data.todo.newTodo);
+		});
+		return () => {
+			channel.unbind_all();
+			channel.unsubscribe();
+		};
+	}, []);
 
 	const onClickHandler = (message, id) => {
 		console.log(message);
@@ -56,9 +86,9 @@ function Todos(props) {
 		e.preventDefault();
 		if (message === "correct") {
 			if (editebale.length !== 0) {
-				console.log({ editebale });
+				console.log({editebale});
 				axios
-					.put(`/todos/${id}`, { text: editebale, isdone: false })
+					.put(`/todos/${id}`, {text: editebale, isdone: false})
 					.then((res) => {
 						console.log(res.data);
 						document.getElementById(`${id}`).style.display = "none";
@@ -75,20 +105,20 @@ function Todos(props) {
 		}
 	};
 	const onClickHandlerIsDone = (isdone, text, id) => {
-		console.log({ isdone });
+		console.log({isdone});
 		setOnClick(false);
-		axios.put(`/todos/${id}`, { text: text, isdone: !isdone }).then((res) => {
+		axios.put(`/todos/${id}`, {text: text, isdone: !isdone}).then((res) => {
 			console.log(res.data);
 		});
 	};
 
 	return (
-		<Div>
+		<Div className={props.todos.length === 0 && "hide"}>
 			<ul>
-				{props.todos.map(({ _id: id, text, isdone }) => {
+				{props.todos.map(({_id: id, text, isdone}) => {
 					return (
-						<div className={isdone ? "todos__done " : "todos__ligne"}>
-							<div style={{ width: "70%" }}>
+						<div className={isdone ? "todos__done " : "todos__ligne "}>
+							<div style={{width: "70%"}}>
 								<Li onClick={onClickHandlerIsDone.bind(this, isdone, text, id)}>
 									{text}
 								</Li>
@@ -114,9 +144,9 @@ function Todos(props) {
 									</form>
 								)}
 							</div>
-							<div style={{ width: "20%", justifyContent: "center" }}>
+							<div style={{width: "20%", justifyContent: "center"}}>
 								<IconContext.Provider
-									value={{ color: "red", className: "react-icons" }}
+									value={{color: "red", className: "react-icons"}}
 								>
 									<AiOutlineDelete
 										size="20"
@@ -124,7 +154,7 @@ function Todos(props) {
 									/>
 								</IconContext.Provider>
 								<IconContext.Provider
-									value={{ color: "blue", className: "react-icons" }}
+									value={{color: "blue", className: "react-icons"}}
 								>
 									{!isdone && (
 										<FaRegEdit
@@ -147,4 +177,9 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps, { setTodos })(Todos);
+export default connect(mapStateToProps, {
+	setTodos,
+	addTodo,
+	deleteTodo,
+	updateTodo,
+})(Todos);
