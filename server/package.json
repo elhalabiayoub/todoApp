@@ -4,7 +4,10 @@
 	"description": "todolist application which u can add , remove and edit your daily tasks",
 	"main": "index.js",
 	"scripts": {
-		"start": " nodemon server.js",
+		"start": " node server.js",
+		"server": "nodemon server.js",
+		"client": "npm start --prefix client ",
+		"dev": "concurrently \"npm run server\" \" npm run client \"",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
@@ -12,6 +15,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"body-parser": "^1.19.0",
+		"concurrently": "^5.3.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"mongoose": "^5.9.28",
